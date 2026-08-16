@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ย้อนหลัง · ทางออกวันนี้</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="site-header">
+      <div class="brand">
+        <a href="./" class="wordmark">ทางออกวันนี้</a>
+        <span class="tagline">ฉบับย้อนหลัง</span>
+      </div>
+      <nav class="nav">
+        <a href="./">วันนี้</a>
+        <a href="./admin.html">หลังบ้าน</a>
+      </nav>
+    </header>
+    <main class="main">
+      <ul class="archive-list" id="list"></ul>
+    </main>
+  </div>
+  <script type="module">
+    import { formatThaiDate } from "./schema.js";
+    import { listPublished } from "./store.js";
+
+    const list = document.getElementById("list");
+    const items = listPublished();
+    if (!items.length) {
+      list.innerHTML = '<li class="empty">ยังไม่มีฉบับเผยแพร่</li>';
+    } else {
+      for (const issue of items) {
+        const a = document.createElement("a");
+        a.href = `./?d=${encodeURIComponent(issue.id)}`;
+        a.innerHTML = `<div class="d">${formatThaiDate(issue.date)}</div><div class="t">${issue.problem.title}</div>`;
+        const li = document.createElement("li");
+        li.append(a);
+        list.append(li);
+      }
+    }
+  </script>
+</body>
+</html>
